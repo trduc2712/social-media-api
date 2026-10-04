@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/tests/">
+    <Project Path="tests/SocialMedia.Api.FunctionalTests/SocialMedia.Api.FunctionalTests.csproj" />
+    <Project Path="tests/SocialMedia.Application.UnitTests/SocialMedia.Application.UnitTests.csproj" />
+    <Project Path="tests/SocialMedia.ArchitectureTests/SocialMedia.ArchitectureTests.csproj" />
+    <Project Path="tests/SocialMedia.Domain.UnitTests/SocialMedia.Domain.UnitTests.csproj" />
+    <Project Path="tests/SocialMedia.Infrastructure.IntegrationTests/SocialMedia.Infrastructure.IntegrationTests.csproj" />
+    <Project Path="tests/SocialMedia.Tests.Common/SocialMedia.Tests.Common.csproj" />
+  </Folder>
+  <Project Path="SocialMedia.Api/SocialMedia.Api.csproj" />
+  <Project Path="SocialMedia.Application/SocialMedia.Application.csproj" />
+  <Project Path="SocialMedia.Contract/SocialMedia.Contract.csproj" />
+  <Project Path="SocialMedia.Domain/SocialMedia.Domain.csproj" />
+  <Project Path="SocialMedia.Infrastructure/SocialMedia.Infrastructure.csproj" />
+</Solution>
