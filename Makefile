@@ -8,7 +8,7 @@ TEST_PROJECTS_functional := $(wildcard tests/*.FunctionalTests)
 TEST_PROJECTS_architecture := $(wildcard tests/*.ArchitectureTests)
 TEST_ARGS := $(if $(FILTER),--filter "$(FILTER)")
 
-.PHONY: tools build run format test migration migrate db-reset
+.PHONY: tools build run watch format test migration migrate db-reset
 
 tools:
 	dotnet tool restore
@@ -18,6 +18,9 @@ build:
 
 run:
 	dotnet run --project SocialMedia.Api
+
+watch:
+	DOTNET_USE_POLLING_FILE_WATCHER=1 dotnet watch --project SocialMedia.Api run
 
 format:
 	dotnet format SocialMedia.slnx --exclude SocialMedia.Infrastructure/Migrations
