@@ -7,7 +7,7 @@
   filtered: `make test FILTER=<Name>`)
 - Format: `make format`
 - Add migration: `make migration NAME=<Name>`
-- Run API: `make run`
+- Run API: `make run` (with hot reload: `make watch`)
 
 Use these instead of raw `dotnet` commands. Run `make build` and the relevant
 tests before saying you're done.
