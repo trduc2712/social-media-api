@@ -8,7 +8,7 @@ TEST_PROJECTS_functional := $(wildcard tests/*.FunctionalTests)
 TEST_PROJECTS_architecture := $(wildcard tests/*.ArchitectureTests)
 TEST_ARGS := $(if $(FILTER),--filter "$(FILTER)")
 
-.PHONY: tools build run watch format test migration migrate db-reset
+.PHONY: tools build run watch format test migration migrate migrations-bundle db-reset
 
 tools:
 	dotnet tool restore
@@ -45,6 +45,9 @@ endif
 
 migrate: tools
 	$(EF) database update $(TARGET) $(EF_PROJECTS)
+
+migrations-bundle: tools
+	$(EF) migrations bundle $(EF_PROJECTS) --configuration Release --output artifacts/efbundle --force
 
 db-reset: tools
 	$(EF) database drop --force $(EF_PROJECTS)
