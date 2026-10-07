@@ -47,6 +47,7 @@ migrate: tools
 	$(EF) database update $(TARGET) $(EF_PROJECTS)
 
 migrations-bundle: tools
+	dotnet restore SocialMedia.Api
 	$(EF) migrations bundle $(EF_PROJECTS) --configuration Release --output artifacts/efbundle --force
 
 db-reset: tools
