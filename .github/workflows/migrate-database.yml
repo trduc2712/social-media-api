@@ -1,0 +1,49 @@
+name: Migrate database
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: Name of the environment whose database is migrated, e.g. Staging.
+        required: true
+        type: string
+    secrets:
+      connection-string:
+        description: Npgsql connection string of the database to migrate.
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: migrate-database-${{ inputs.environment }}
+      cancel-in-progress: false
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+
+      - name: Build migration bundle
+        run: make migrations-bundle
+
+      - name: Apply migrations
+        env:
+          ASPNETCORE_ENVIRONMENT: ${{ inputs.environment }}
+          CONNECTION_STRING: ${{ secrets.connection-string }}
+        run: |
+          if [ -z "$CONNECTION_STRING" ]; then
+            echo "::error::The connection-string secret is empty or not set."
+            exit 1
+          fi
+          ./artifacts/efbundle --connection "$CONNECTION_STRING"
