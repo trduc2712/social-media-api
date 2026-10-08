@@ -44,6 +44,7 @@ endif
 	$(EF) migrations add $(NAME) $(EF_PROJECTS) --output-dir Migrations
 
 migrate: tools
+	dotnet restore SocialMedia.Api
 	$(EF) database update $(TARGET) $(EF_PROJECTS)
 
 migrations-bundle: tools
