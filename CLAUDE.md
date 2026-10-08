@@ -8,6 +8,7 @@
 - Format: `make format`
 - Add migration: `make migration NAME=<Name>`
 - Run API: `make run` (with hot reload: `make watch`)
+- Database docs: `make db-docs` (verify: `make db-docs-check`, `make db-docs-lint`)
 
 Use these instead of raw `dotnet` commands. Run `make build` and the relevant
 tests before saying you're done.
@@ -32,6 +33,9 @@ tests before saying you're done.
 - Use the standardized Makefile commands instead of running CLI commands manually.
 - Queries return DTOs, never EF entities.
 - Pass CancellationToken through every async call.
+- Describe every table and column with `HasComment(...)` in its EF
+  configuration. After adding a migration, run `make migrate` and
+  `make db-docs` in the same change. Never edit `docs/database/` by hand.
 
 ## Boundaries
 

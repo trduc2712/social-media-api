@@ -1,6 +1,12 @@
 EF := dotnet ef
 EF_PROJECTS := --project SocialMedia.Infrastructure --startup-project SocialMedia.Api
 
+TBLS_VERSION := v1.96.1
+TBLS ?= go run github.com/k1LoW/tbls@$(TBLS_VERSION)
+TBLS_ARGS := --config .tbls.yml
+TBLS_DSN ?= postgres://postgres:12345678@localhost:5432/social-media?sslmode=disable
+export TBLS_DSN
+
 TEST_TYPES := unit integration functional architecture
 TEST_PROJECTS_unit := $(wildcard tests/*.UnitTests)
 TEST_PROJECTS_integration := $(wildcard tests/*.IntegrationTests)
@@ -8,7 +14,7 @@ TEST_PROJECTS_functional := $(wildcard tests/*.FunctionalTests)
 TEST_PROJECTS_architecture := $(wildcard tests/*.ArchitectureTests)
 TEST_ARGS := $(if $(FILTER),--filter "$(FILTER)")
 
-.PHONY: tools build run watch format test migration migrate migrations-bundle db-reset
+.PHONY: tools build run watch format test migration migrate migrations-bundle db-reset db-docs db-docs-check db-docs-lint
 
 tools:
 	dotnet tool restore
@@ -54,3 +60,12 @@ migrations-bundle: tools
 db-reset: tools
 	$(EF) database drop --force $(EF_PROJECTS)
 	$(EF) database update $(EF_PROJECTS)
+
+db-docs:
+	$(TBLS) doc $(TBLS_ARGS) --rm-dist
+
+db-docs-check:
+	$(TBLS) diff $(TBLS_ARGS)
+
+db-docs-lint:
+	$(TBLS) lint $(TBLS_ARGS)
