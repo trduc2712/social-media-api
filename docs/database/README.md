@@ -2,8 +2,9 @@
 
 ## Tables
 
-| Name | Columns | Comment | Type |
-| ---- | ------- | ------- | ---- |
+| Name                            | Columns | Comment                                                                                            | Type       |
+| ------------------------------- | ------- | -------------------------------------------------------------------------------------------------- | ---------- |
+| [public.users](public.users.md) | 10      | People who use the app. Sign-in is handled by Clerk; each row is the local copy of one Clerk user. | BASE TABLE |
 
 ## Relations
 
@@ -11,6 +12,18 @@
 erDiagram
 
 
+"public.users" {
+  varchar_2048_ avatar_url
+  varchar_255_ clerk_user_id
+  timestamp_with_time_zone created_at_utc
+  timestamp_with_time_zone deleted_at_utc
+  varchar_100_ first_name
+  uuid id
+  boolean is_deleted
+  varchar_100_ last_name
+  timestamp_with_time_zone updated_at_utc
+  varchar_64_ username
+}
 ```
 
 ---

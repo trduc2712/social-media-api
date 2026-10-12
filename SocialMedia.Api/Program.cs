@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using SocialMedia.Api.Authentication;
 using SocialMedia.Api.OpenApi;
 using SocialMedia.Application;
@@ -8,8 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddApplication();
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("Default"));
 builder.Services.AddClerkAuthentication(builder.Configuration);
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy => policy
