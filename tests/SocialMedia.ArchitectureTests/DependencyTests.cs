@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace SocialMedia.ArchitectureTests;
 
@@ -12,7 +13,8 @@ public class DependencyTests
 
     private static readonly Assembly[] Projects = [Domain, Contract, Application, Infrastructure, Api];
 
-    private static readonly string[] ForbiddenPackages = ["Microsoft.EntityFrameworkCore", "Npgsql"];
+    private static readonly string FrameworkDirectory =
+        Path.TrimEndingDirectorySeparator(RuntimeEnvironment.GetRuntimeDirectory());
 
     public static TheoryData<string, string> ForbiddenProjectReferences => new()
     {
@@ -29,23 +31,7 @@ public class DependencyTests
         { NameOf(Infrastructure), NameOf(Api) },
     };
 
-    public static TheoryData<string, string> ForbiddenPackageReferences
-    {
-        get
-        {
-            var data = new TheoryData<string, string>();
-
-            foreach (var project in new[] { Domain, Contract })
-            {
-                foreach (var package in ForbiddenPackages)
-                {
-                    data.Add(NameOf(project), package);
-                }
-            }
-
-            return data;
-        }
-    }
+    public static TheoryData<string> FrameworkOnlyProjects => [NameOf(Domain), NameOf(Contract)];
 
     [Theory]
     [MemberData(nameof(ForbiddenProjectReferences))]
@@ -55,19 +41,20 @@ public class DependencyTests
     }
 
     [Theory]
-    [MemberData(nameof(ForbiddenPackageReferences))]
-    public void ProjectShouldNotReference_ForbiddenPackage(string project, string package)
+    [MemberData(nameof(FrameworkOnlyProjects))]
+    public void Project_ShouldReferenceOnlyTheFramework(string project)
     {
-        Assert.DoesNotContain(
-            ReferencesOf(project),
-            reference => reference == package || reference.StartsWith(package + ".", StringComparison.Ordinal));
+        Assert.DoesNotContain(AssemblyOf(project).GetReferencedAssemblies(), reference => !IsFrameworkAssembly(reference));
     }
 
     private static string NameOf(Assembly assembly) => assembly.GetName().Name!;
 
+    private static Assembly AssemblyOf(string project) =>
+        Projects.Single(assembly => NameOf(assembly) == project);
+
     private static IEnumerable<string> ReferencesOf(string project) =>
-        Projects
-            .Single(assembly => NameOf(assembly) == project)
-            .GetReferencedAssemblies()
-            .Select(reference => reference.Name!);
+        AssemblyOf(project).GetReferencedAssemblies().Select(reference => reference.Name!);
+
+    private static bool IsFrameworkAssembly(AssemblyName reference) =>
+        Path.GetDirectoryName(Assembly.Load(reference).Location) == FrameworkDirectory;
 }
