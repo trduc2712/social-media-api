@@ -30,6 +30,7 @@ tests before saying you're done.
 ## Rules
 
 - Don't write comments unless asked.
+- Don't use abbreviations in names. Write the words out in full.
 - Use the standardized Makefile commands instead of running CLI commands manually.
 - Queries return DTOs, never EF entities.
 - Pass CancellationToken through every async call.
