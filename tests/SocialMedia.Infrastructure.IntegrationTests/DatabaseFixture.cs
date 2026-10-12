@@ -12,7 +12,7 @@ public sealed class DatabaseFixture : IAsyncLifetime
     public const string ConnectionStringVariable = "TEST_DATABASE_CONNECTION_STRING";
 
     private const string DefaultConnectionString =
-        "Host=localhost;Port=5432;Username=postgres;Password=12345678";
+        "Host=localhost;Port=5432;Username=postgres;Password=2712";
 
     private ServiceProvider _serviceProvider = null!;
 

@@ -4,7 +4,7 @@ EF_PROJECTS := --project SocialMedia.Infrastructure --startup-project SocialMedi
 TBLS_VERSION := v1.96.1
 TBLS ?= go run github.com/k1LoW/tbls@$(TBLS_VERSION)
 TBLS_ARGS := --config .tbls.yml
-TBLS_DSN ?= postgres://postgres:12345678@localhost:5432/social-media?sslmode=disable
+TBLS_DSN ?= postgres://postgres:2712@localhost:5432/social-media?sslmode=disable
 export TBLS_DSN
 
 TEST_TYPES := unit integration functional architecture
