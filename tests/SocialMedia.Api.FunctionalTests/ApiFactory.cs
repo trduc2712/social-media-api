@@ -44,6 +44,12 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.UseSetting("Storage:ServiceUrl", "https://storage.test");
+        builder.UseSetting("Storage:Region", "test-region");
+        builder.UseSetting("Storage:BucketName", "test-bucket");
+        builder.UseSetting("Storage:AccessKeyId", "test-access-key-id");
+        builder.UseSetting("Storage:SecretAccessKey", "test-secret-access-key");
+
         builder.ConfigureTestServices(services =>
         {
             services.Configure<ClerkOptions>(options =>

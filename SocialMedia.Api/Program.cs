@@ -2,12 +2,15 @@ using SocialMedia.Api.Authentication;
 using SocialMedia.Api.OpenApi;
 using SocialMedia.Application;
 using SocialMedia.Infrastructure;
+using SocialMedia.Infrastructure.Storage;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("Default"));
+builder.Services.AddStorage(options =>
+    builder.Configuration.GetSection(StorageOptions.SectionName).Bind(options));
 builder.Services.AddClerkAuthentication(builder.Configuration);
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy => policy
