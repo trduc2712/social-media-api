@@ -14,7 +14,7 @@ TEST_PROJECTS_functional := $(wildcard tests/*.FunctionalTests)
 TEST_PROJECTS_architecture := $(wildcard tests/*.ArchitectureTests)
 TEST_ARGS := $(if $(FILTER),--filter "$(FILTER)")
 
-.PHONY: tools build run watch format test migration migrate migrations-bundle db-reset db-docs db-docs-check db-docs-lint
+.PHONY: tools build run watch secret secrets format test migration migrate migrations-bundle db-reset db-docs db-docs-check db-docs-lint
 
 tools:
 	dotnet tool restore
@@ -27,6 +27,18 @@ run:
 
 watch:
 	DOTNET_USE_POLLING_FILE_WATCHER=1 dotnet watch --project SocialMedia.Api run
+
+secret:
+ifndef NAME
+	$(error NAME is required, e.g. make secret NAME=Storage:BucketName VALUE=my-bucket)
+endif
+ifndef VALUE
+	$(error VALUE is required, e.g. make secret NAME=Storage:BucketName VALUE=my-bucket)
+endif
+	@dotnet user-secrets set "$(NAME)" "$(VALUE)" --project SocialMedia.Api
+
+secrets:
+	@dotnet user-secrets list --project SocialMedia.Api
 
 format:
 	dotnet format SocialMedia.slnx --exclude SocialMedia.Infrastructure/Migrations
